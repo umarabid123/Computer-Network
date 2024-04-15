@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNS Resolver</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <style>
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    max-width: 600px;
+    text-align: center;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+#result {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DNS Resolver</h1>
+        <input type="text" id="domainInput" placeholder="Enter domain name">
+        <button onclick="resolveDNS()">Resolve DNS</button>
+        <div id="result"></div>
+    </div>
+    <script>
+        function resolveDNS() {
+    const domain = document.getElementById('domainInput').value;
+    if (!domain) {
+        alert('Please enter a domain name');
+        return;
+    }
+
+    const url = `https://dns.google/resolve?name=${domain}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const results = document.getElementById('result');
+            if (data.Answer) {
+                let output = 'Resolved IP Addresses:<br />';
+                data.Answer.forEach(answer => {
+                    if (answer.type === 1) { // Type 1 is A record, which is an IP address
+                        output += answer.data 
+                    }
+                });
+                results.innerHTML = output;
+            } else {
+                results.innerHTML = "No IP address found or error resolving domain.";
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('result').innerHTML = 'Failed to resolve domain.';
+        });
+}
+    </script>
+</body>
+</html>

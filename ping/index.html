@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ping Tool</title>
+<style>
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+
+.container {
+  text-align: center;
+}
+
+input {
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 8px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ping Tool</h1>
+    <input type="text" id="target" placeholder="Enter target URL or IP">
+    <button onclick="ping()">Ping</button>
+    <div id="result"></div>
+  </div>
+  <script>
+    function ping() {
+  var target = document.getElementById('target').value;
+  var startTime = new Date().getTime();
+
+  fetch(target)
+    .then(response => {
+      var endTime = new Date().getTime();
+      var timeDiff = endTime - startTime;
+      document.getElementById('result').innerText = `Ping to ${target}: ${timeDiff}ms`;
+    })
+    .catch(error => {
+      document.getElementById('result').innerText = `Failed to ping ${target}`;
+    });
+}
+
+  </script>
+</body>
+</html>

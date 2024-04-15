@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traceroute Tool</title>
+<style>
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+
+.container {
+  text-align: center;
+}
+
+input {
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 8px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Traceroute Tool</h1>
+    <input type="text" id="target" placeholder="Enter target URL or IP">
+    <button onclick="traceroute()">Traceroute</button>
+    <div id="result"></div>
+  </div>
+  <script>
+    async function traceroute() {
+  var target = document.getElementById('target').value;
+  var maxHops = 30; // Maximum number of hops to trace
+  var result = "";
+
+  for (var ttl = 1; ttl <= maxHops; ttl++) {
+    try {
+      var response = await fetch(`http://${target}`, {
+        method: 'GET',
+        headers: {
+          'TTL': ttl
+        }
+      });
+
+      var ip = response.headers.get('X-Forwarded-For') || 'Unknown';
+      result += `Hop ${ttl}: ${ip}\n`;
+
+      // Check if we've reached the final destination
+      if (response.status == 200) {
+        result += `Destination reached: ${target}\n`;
+        break;
+      }
+    } catch (error) {
+      result += `Hop ${ttl}: Unknown\n`;
+    }
+  }
+
+  document.getElementById('result').innerText = result;
+}
+
+  </script>
+</body>
+</html>
